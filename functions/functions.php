@@ -33,6 +33,12 @@ function token_generator(){
 
 
 function validate_user_registration(){
+    $errors = [];
+
+    $min = 3;
+    $max = 20;
+
+
     if($_SERVER['REQUEST_METHOD'] == "POST"){
 
         $first_name        = clean($_POST['first_name']);
@@ -41,7 +47,30 @@ function validate_user_registration(){
         $email             = clean($_POST['email']);
         $password          = clean($_POST['password']);
         $confirm_password  = clean($_POST['confirm_password']);
+
+        $errors[] = validate_length($first_name, "first name", $min, $max);
+        $errors[] = validate_length($last_name, "last name", $min, $max);
+
+
+        if(!empty($errors)){
+            foreach($errors as $error){
+                echo $error . "<br>";
+            }
+        }
     }
+}
+
+function validate_length($string, $label, $min, $max){
+    $msg = "";
+
+    if(strlen($string) < $min){
+        $msg = "Your {$label} cannot be less than {$min} characters";
+    }
+    else if(strlen($string) > $max){
+        $msg = "Your {$label} cannot be greater than {$max} characters";
+    }
+
+    return $msg;
 }
 
 ?>
