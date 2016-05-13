@@ -37,6 +37,25 @@ function validation_errors($error_message){
     return $alert_error_message;
 }
 
+function email_exists($email){
+    $sql = "SELECT id FROM users WHERE email = '$email'";
+    $result = query($sql);
+
+    if(row_count($result) >= 1){
+        return true;
+    }
+    return false;
+}
+function username_exists($username){
+    $sql = "SELECT id FROM users WHERE username = '$username'";
+    $result = query($sql);
+
+    if(row_count($result) >= 1){
+        return true;
+    }
+    return false;
+}
+
 //======
 //====== VALIDATION FUNCTIONS --------------------------------------------------
 //======
@@ -57,6 +76,14 @@ function validate_user_registration(){
         $email             = clean($_POST['email']);
         $password          = clean($_POST['password']);
         $confirm_password  = clean($_POST['confirm_password']);
+
+
+        if(email_exists($email)){
+            $errors[] = "Sorry that email is already taken.";
+        }
+        if(username_exists($username)){
+            $errors[] = "Sorry that username is already taken.";
+        }
 
         $errors = validate_length($errors, $first_name, "first name", $min, $max);
         $errors = validate_length($errors, $last_name, "last name", $min, $max);
