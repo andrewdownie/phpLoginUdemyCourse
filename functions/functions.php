@@ -26,6 +26,16 @@ function token_generator(){
     $token = $_SESSION['token'] = md5(uniqid(mt_rand(), true));
     return $token;
 }
+function validation_errors($error_message){
+    $alert_error_message = "
+        <div class='alert alert-danger alert-dismissible' role='alert'>
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            <strong>Warning!</strong>
+            {$error_message}
+        </div>
+    ";
+    return $alert_error_message;
+}
 
 //======
 //====== VALIDATION FUNCTIONS --------------------------------------------------
@@ -36,7 +46,7 @@ function validate_user_registration(){
     $errors = [];
 
     $min = 3;
-    $max = 20;
+    $max = 50;
 
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
@@ -48,37 +58,32 @@ function validate_user_registration(){
         $password          = clean($_POST['password']);
         $confirm_password  = clean($_POST['confirm_password']);
 
-        $errors[] = validate_length($first_name, "first name", $min, $max);
-        $errors[] = validate_length($last_name, "last name", $min, $max);
+        $errors = validate_length($errors, $first_name, "first name", $min, $max);
+        $errors = validate_length($errors, $last_name, "last name", $min, $max);
+        $errors = validate_length($errors, $email, "email", $min, $max);
 
+        if($password !== $confirm_password){
+            $errors[] = "Your passwords do not match.";
+        }
 
         if(!empty($errors)){
             foreach($errors as $error){
-
-                echo "
-
-                <div class='alert alert-danger alert-dismissible' role='alert'>
-                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <strong>Warning!</strong>
-                    {$error}
-                </div>";
-
+                echo validation_errors($error);
             }
         }
     }
 }
 
-function validate_length($string, $label, $min, $max){
-    $msg = "";
+function validate_length($errors, $string, $label, $min, $max){
 
     if(strlen($string) < $min){
-        $msg = "Your {$label} cannot be less than {$min} characters";
+        $errors[] = "Your {$label} cannot be less than {$min} characters";
     }
     else if(strlen($string) > $max){
-        $msg = "Your {$label} cannot be greater than {$max} characters";
+        $errors[] = "Your {$label} cannot be greater than {$max} characters";
     }
 
-    return $msg;
+    return $errors;
 }
 
 ?>
