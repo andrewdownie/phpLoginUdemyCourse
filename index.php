@@ -15,7 +15,6 @@
 		$row = fetch_array($result);
 
 		echo $row['username'];
-
 	 ?>
 
 <?php include("includes/footer.php") ?>
