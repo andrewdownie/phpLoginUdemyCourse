@@ -58,6 +58,10 @@ function username_exists($username){
     return false;
 }
 
+function send_email($email, $subject, $msg, $headers){
+    return mail($email, $subject, $msg, $headers);
+}
+
 //======
 //====== VALIDATION FUNCTIONS --------------------------------------------------
 //======
@@ -139,6 +143,16 @@ function register_user($first_name, $last_name, $username, $email, $password){
     $sql.= "values ('{$first_name}', '{$last_name}', '{$username}', '{$email}', '{$password}', '{$validation}', 0)";
     $result = query($sql);
     confirm($result);
+
+
+    $subject = "Activate Account - portfolio";
+    $msg = "Please click the link below to activate your Account
+    http://localhost/login/activate.php?email=$email&code=$validation_code
+    ";
+
+    $header = "From: noreply@thiswebsite.com";
+
+    send_email($email, $subject, $msg, $headers);
 
     return true;
 
