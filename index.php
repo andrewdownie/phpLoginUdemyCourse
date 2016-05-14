@@ -2,19 +2,9 @@
 	<?php include("includes/nav.php") ?>
 
 	<div class="jumbotron">
-		<h1 class="text-center"> Home Page</h1>
+		<h1 class="text-center"> Home Page</h1> <?php display_message() ?>
 	</div>
 
-	<?php
 
-		$sql = "SELECT * FROM users";
-		$result = query($sql);
-
-		confirm($result);
-
-		$row = fetch_array($result);
-
-		echo $row['username'];
-	 ?>
 
 <?php include("includes/footer.php") ?>

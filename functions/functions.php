@@ -40,6 +40,7 @@ function validation_errors($error_message){
 function email_exists($email){
     $sql = "SELECT id FROM users WHERE email = '$email'";
     $result = query($sql);
+    confirm($result);
 
     if(row_count($result) >= 1){
         return true;
@@ -49,6 +50,7 @@ function email_exists($email){
 function username_exists($username){
     $sql = "SELECT id FROM users WHERE username = '$username'";
     $result = query($sql);
+    confirm($result);
 
     if(row_count($result) >= 1){
         return true;
@@ -100,7 +102,8 @@ function validate_user_registration(){
         }
         else{
             if(register_user($first_name, $last_name, $username, $email, $password)){
-                echo "user registered";
+                set_message("<p class='bg-success text-center'> Please check your email or spam folder for an activation link.</p>");
+                redirect("index.php");
             }
         }
     }
@@ -128,7 +131,7 @@ function register_user($first_name, $last_name, $username, $email, $password){
     if(email_exists($email) || username_exists($username)){
         return false;
     }
-    
+
     $password = md5($password);
     $validation = md5($username + microtime());
 
