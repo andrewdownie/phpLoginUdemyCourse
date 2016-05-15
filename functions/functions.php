@@ -28,11 +28,11 @@ function token_generator(){
 }
 function validation_errors($error_message){
     $alert_error_message = "
-        <div class='alert alert-danger alert-dismissible' role='alert'>
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-            <strong>Warning!</strong>
-            {$error_message}
-        </div>
+    <div class='alert alert-danger alert-dismissible' role='alert'>
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+    <strong>Warning!</strong>
+    {$error_message}
+    </div>
     ";
     return $alert_error_message;
 }
@@ -176,13 +176,13 @@ function register_user($first_name, $last_name, $username, $email, $password){
 function activate_user(){
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         if(isset($_GET['email'])){
-             $email = clean($_GET['email']);
+            $email = clean($_GET['email']);
 
-             $validation_code = clean($_GET['code']);
+            $validation_code = clean($_GET['code']);
 
-             $sql = "SELECT id FROM users WHERE email = '".escape($_GET['email'])."' AND validation_code = '".escape($_GET['code'])."'";
-             $result = query($sql);
-             confirm($result);
+            $sql = "SELECT id FROM users WHERE email = '".escape($_GET['email'])."' AND validation_code = '".escape($_GET['code'])."'";
+            $result = query($sql);
+            confirm($result);
 
             if(row_count($result) == 1){
                 $sql = "UPDATE users SET active = 1, validation_code = 0 WHERE email='".escape($email)."' AND validation_code='".escape($validation_code)."'";
@@ -198,6 +198,41 @@ function activate_user(){
                 redirect("login.php");
             }
         }
+    }
+}
+
+//======
+//====== VALIDATE USER LOGIN FUNCTIONS -----------------------------------------
+//======
+
+function validate_user_login(){
+    $errors = [];
+
+    $min = 3;
+    $max = 50;
+
+    $email             = clean($_POST['email']);
+    $password          = clean($_POST['password']);
+
+    if(empty($email)){
+        $errors[] = "Email field cannot be empty.";
+    }
+
+    if(empty($password)){
+        $errors[] = "Password field cannot be empty.";
+    }
+
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        echo "IT WORKS";
+    }
+
+    if(!empty($errors)){
+        foreach($errors as $error){
+            echo validation_errors($error);
+        }
+    }
+    else{
+        echo "NOT ERRORS";
     }
 }
 
