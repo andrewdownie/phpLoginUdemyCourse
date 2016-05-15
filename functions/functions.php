@@ -109,6 +109,10 @@ function validate_user_registration(){
                 set_message("<p class='bg-success text-center'> Please check your email or spam folder for an activation link.</p>");
                 redirect("index.php");
             }
+            else{
+                set_message("<p class='bg-success text-center'> Sorry, we could not register you.</p>");
+                redirect("index.php");
+            }
         }
     }
 }
@@ -124,6 +128,13 @@ function validate_length($errors, $string, $label, $min, $max){
 
     return $errors;
 }
+
+
+
+
+//======
+//====== REGISTER USER FUNCTIONS -----------------------------------------------
+//======
 
 function register_user($first_name, $last_name, $username, $email, $password){
     $first_name = escape($first_name);
@@ -156,6 +167,31 @@ function register_user($first_name, $last_name, $username, $email, $password){
 
     return true;
 
+}
+
+//======
+//====== ACTIVATE USER FUNCTIONS -----------------------------------------------
+//======
+
+function activate_user(){
+    if($_SERVER['REQUEST_METHOD'] == "GET"){
+        if(isset($_GET['email'])){
+             $email = clean($_GET['email']);
+
+             $validation_code = clean($_GET['code']);
+
+             $sql = "SELECT id FROM users WHERE email = '".escape($_GET['email'])."' AND validation_code = '".escape($_GET['code'])."'";
+             $result = query($sql);
+             confirm($result);
+
+             if(row_count($result) == 1){
+
+             }
+
+             echo "<p class'bg-success'>Your account has been activated, please login.</p>";
+
+        }
+    }
 }
 
 ?>
