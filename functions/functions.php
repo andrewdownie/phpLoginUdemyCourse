@@ -292,7 +292,18 @@ function recover_password(){
 
         if(isset($_SESSION['token']) && $_POST['token'] === $_SESSION['token'])
         {
-            echo "it works.";
+            $email = clean($_POST['email']);
+
+            if(email_exists($email)){
+                $validation_code = md5($email, microtime());
+
+                $subject = "Please reset your password.";
+                $message = "Here is your password reset code: {$validation_code}
+                click here to reset your password: http://localhost/code.php?email=$email&code=validation_code";
+                $header = "From: noreply@yourwebsite.com";
+
+                send_email($email, $subject, $message, $headers);
+            }
         }
 
     }
