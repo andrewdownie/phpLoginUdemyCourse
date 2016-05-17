@@ -323,7 +323,7 @@ function recover_password(){
 
     }
     else{//redirect if the token is invalid
-        redirect("index.php");//this seems to cause problems while testing
+        //redirect("index.php");//this seems to cause problems while testing
     }
 }
 //======
@@ -340,7 +340,7 @@ function validate_code(){
         else{
             if(isset($_POST['code'])){
                 $email = clean($_GET['email']);
-                $validation_code = clean($_POST['code']));
+                $validation_code = clean($_POST['code']);
                 $sql = "SELECT id FROM users WHERE validation_code = '".escape($validation_code)."' AND email = '".escape($email)."'";
                 $result = query($sql);
 
@@ -348,7 +348,7 @@ function validate_code(){
                     redirect("reset.php");
                 }
                 else{
-                    echo validation_errors(Sorry, wrong validation code);
+                    echo validation_errors("Sorry, wrong validation code");
                 }
             }
         }
