@@ -368,12 +368,19 @@ function validate_code(){
 function password_reset(){
     if(isset($_COOKIE['temp_access_code'])){
 
-        if(isset($_SESSION['token']) && $_POST['token'] === $_SESSION['token']){
 
-        }
 
         if( isset($_GET['email']) && isset($_GET['code']) ){
-            echo "it works";
+            if( isset($_SESSION['token']) && isset($_POST['token']) ){
+                if($_POST['token'] === $_SESSION['token']){
+
+                    if($_POST['password'] === $_POST['confirm_password']){
+                        echo "Passwords match";
+                    }
+
+                    $sql = "UPDATE users SET password='".escape($_POST['password'])."' WHERE email ='".escape($_GET['email'])."'";
+                }
+            }
         }
     }
     else{
