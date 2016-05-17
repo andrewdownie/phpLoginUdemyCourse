@@ -297,7 +297,7 @@ function recover_password(){
             if(email_exists($email)){
                 $validation_code = md5($email + microtime());
 
-                setcookie('temp_access_code', $validation_code, time() + 60);
+                setcookie('temp_access_code', $validation_code, time() + 360);
 
                 $sql = "UPDATE users SET validation_code = '".escape($validation_code)."' WHERE email = '".escape($email)."'";
                 $result = query($sql);
