@@ -356,7 +356,7 @@ function validate_code(){
 
     }
     else{
-        set_message("<p class='bg-dander text-center'>Sorry your validation cookie was expired.</p>");
+        set_message("<p class='bg-danger text-center'>Sorry your validation cookie was expired.</p>");
         redirect("recover.php");
     }
 }
@@ -375,10 +375,16 @@ function password_reset(){
                 if($_POST['token'] === $_SESSION['token']){
 
                     if($_POST['password'] === $_POST['confirm_password']){
-                        echo "Passwords match";
+                        $updated_password = md5($_POST['password']);
+
+
+                        $sql = "UPDATE users SET password='".escape($updated_password)."', validation_code = 0 WHERE email ='".escape($_GET['email'])."'";
+                        query($sql);
+                        set_message("<p class='bg-success text-center'>Your password has been updated, please login.</p>");
+                        redirect("login.php");
                     }
 
-                    $sql = "UPDATE users SET password='".escape($_POST['password'])."' WHERE email ='".escape($_GET['email'])."'";
+
                 }
             }
         }
