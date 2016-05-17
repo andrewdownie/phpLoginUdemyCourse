@@ -323,7 +323,7 @@ function recover_password(){
 
     }
     else{//redirect if the token is invalid
-        redirect("index.php");
+        redirect("index.php");//this seems to cause problems while testing
     }
 }
 //======
@@ -331,14 +331,31 @@ function recover_password(){
 //======
 function validate_code(){
     if(isset($_COOKIE['temp_access_code'])){
-        if($_SERVER['REQUEST_METHOD'] == "GET"){
-            if(isset($_GET['email']) && isset(&_GET['code']){
-                
+        if(!isset($_GET['email']) && !isset($_GET['code'])){
+            redirect("index.php");
+        }
+        else if(empty($_GET['email']) || empty($_GET['code'])){
+            redirect("index.php");
+        }
+        else{
+            if(isset($_POST['code'])){
+                $email = clean($_GET['email']);
+                $validation_code = clean($_POST['code']));
+                $sql = "SELECT id FROM users WHERE validation_code = '".escape($validation_code)."' AND email = '".escape($email)."'";
+                $result = query($sql);
+
+                if(row_count($result) == 1){
+                    redirect("reset.php");
+                }
+                else{
+                    echo validation_errors(Sorry, wrong validation code);
+                }
             }
         }
+
     }
     else{
-        set_message("<p class='bg-dander text-center'>Sorry your validation cookie was expired.</p>")
+        set_message("<p class='bg-dander text-center'>Sorry your validation cookie was expired.</p>");
         redirect("recover.php");
     }
 }
