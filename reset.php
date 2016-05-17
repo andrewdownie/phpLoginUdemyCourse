@@ -1,8 +1,10 @@
 <?php include("includes/header.php") ?>
-
-	<div class="row">
-
+<div class="row">
+	<div class="col-lg-6 col-lg-offset-3">
+		<?php display_message(); ?>
+		<?php password_reset(); ?>
 	</div>
+</div>
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
