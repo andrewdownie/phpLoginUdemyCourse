@@ -325,6 +325,10 @@ function recover_password(){
     else{//redirect if the token is invalid
         //redirect("index.php");//this seems to cause problems while testing
     }
+
+    if(isset($_POST['cancel_submit'])){
+        redirect("login.php");
+    }
 }
 //======
 //====== CODE VALIDATION -------------------------------------------------------
